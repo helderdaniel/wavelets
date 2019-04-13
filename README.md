@@ -1,0 +1,2 @@
+# wavelets
+Simple wavelets implementation
