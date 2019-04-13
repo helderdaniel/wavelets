@@ -3,6 +3,7 @@
  * 
  * hdaniel@ualg.pt apr 2019
  */
+
 /*
 read matlab
 https://github.com/hbristow/cvmatio (does not write)
@@ -14,16 +15,14 @@ wavelet class hierarchy
 waveletTransform class:
     dwt()
     packetTransform()
-
-class must be generic to accept double, float
 */
 
 #include <iostream>
 #include <fstream>
 #include <vector>
-//#include <cmath>
+
 #include "stopwatch/stopwatch.h"
-#include "../00-wavelibsrc/wavelet2s.h"
+#include "../../00-wavelibsrc/wavelet2s.h"
 
 using namespace std;
 

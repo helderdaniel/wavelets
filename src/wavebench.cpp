@@ -3,7 +3,7 @@
  * 
  * hdaniel@ualg.pt apr 2019
  */
-
+/*
 read matlab
 https://github.com/hbristow/cvmatio (does not write)
 https://sourceforge.net/projects/matio/
@@ -15,44 +15,18 @@ waveletTransform class:
     dwt()
     packetTransform()
 
+class must be generic to accept double, float
+*/
 
 #include <iostream>
 #include <fstream>
 #include <vector>
-//#include <cmath>
 #include "stopwatch/stopwatch.h"
-#include "../00-wavelibsrc/wavelet2s.h"
+#include "../../00-wavelibsrc/wavelet2s.h"
+
+#include "utils.h"
 
 using namespace std;
-
-template <typename T>
-ostream& operator<<(ostream& os, const vector<T>& v) {   
-	os << "[ ";
-	for (int i=0; i < v.size(); ++i)
-    		os << v[i] << ' ';
-	os << ']';
-	return os;
-}
-
-/**
- * Extend signal to handle wavelet around boundaries
- * Symetric extension
- * from: http://wavelet2d.sourceforge.net/
- */
-/*
-void* symm_ext(vector<double> &sig, int l) {
-	unsigned int len = sig.size();
-
-	for (int i =0; i < l; i++) {
-		double temp1= sig[i * 2];
-		double temp2= sig[len - 1];
-		sig.insert(sig.begin(),temp1);
-		sig.insert(sig.end(),temp2);
-	}
-
-	return 0;
-}
-*/
 
 struct db7wl {
     //Approximation, Low pass filter db7 coeficients
@@ -93,7 +67,7 @@ struct db7wl {
 } db7;
 
 //dwt
-void dwtp(const float (&w)[14], float* input, vector<float> &output) {
+void dwtp(const float (&w)[14], const float* input, vector<float> &output) {
 const int coefsize = size(w);
     
     for (int i=0; i<coefsize*2; i+=2) {
@@ -109,7 +83,7 @@ void dwt(const db7wl &w, vector<double> &input, vector<float> &output) {
 const int coefsize = size(w.a);
 
     //extend signal to avoid boundaries distortion
-    symm_ext(input, coefsize-2);
+    symmExt(input, coefsize-2);
     
     //dwt low pass
     dwtp(w.a, (float *) input.data(), output);
