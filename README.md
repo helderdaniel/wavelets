@@ -2,5 +2,5 @@
 Simple wavelets implementation
 
 ```
-preliminary commit2
+preliminary commit
 ```
