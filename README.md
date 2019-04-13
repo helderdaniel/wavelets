@@ -2,6 +2,8 @@
 Simple wavelets implementation
 
 ```
-preliminary commits
+Some fast wavelet processing implementation.
+
+This repo have only preliminary tests for now.
 ```
 
