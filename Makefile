@@ -31,7 +31,7 @@ WLETLIBSRC   = $(INCLUDE)/wavelib/$(WLETLIB).cpp
 all: $(BIN)/$(CATCH2LIB).o $(BIN)/$(WLETLIB).o $(BIN)/$(mainfile) $(BIN)/$(testfile) $(BIN)/$(demofile)
 
 $(BIN)/$(mainfile): $(BIN)/$(CATCH2LIB).o $(BIN)/$(WLETLIB).o $(EXAMPLES)/$(mainfile).cpp $(SRC)/evector.hpp $(SRC)/wavelet.hpp $(SRC)/wavelettransform.hpp
-	$(CC) $(EXAMPLES)/$(mainfile).cpp $(BIN)/wavelet2s.o $(CFLAGS) -o $(BIN)/$(mainfile) $(LDFlags) -lfftw3
+	#$(CC) $(EXAMPLES)/$(mainfile).cpp $(BIN)/wavelet2s.o $(CFLAGS) -o $(BIN)/$(mainfile) $(LDFlags) -lfftw3
 
 $(BIN)/$(testfile): $(BIN)/$(CATCH2LIB).o $(BIN)/$(WLETLIB).o $(TESTS)/$(testfile).cpp $(SRC)/evector.hpp $(SRC)/wavelet.hpp $(SRC)/wavelettransform.hpp
 	$(CC) $(TESTS)/$(testfile).cpp $(BIN)/$(CATCH2LIB).o $(CFLAGS) -o $(BIN)/$(testfile) $(LDFlags)
@@ -43,7 +43,7 @@ $(BIN)/$(CATCH2LIB).o:
 	$(CC) $(CATCH2LIBSRC) $(CFLAGS) $(LDFlags) -c -o $(BIN)/$(CATCH2LIB).o
 
 $(BIN)/$(WLETLIB).o:
-	$(CC) $(WLETLIBSRC) $(CFLAGS) $(LDFlags) -c -o $(BIN)/$(WLETLIB).o
+	#$(CC) $(WLETLIBSRC) $(CFLAGS) $(LDFlags) -c -o $(BIN)/$(WLETLIB).o
 
 
 run:

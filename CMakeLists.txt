@@ -50,13 +50,13 @@ add_library(Catch2 ${CATCH2LIBSRC})
 target_link_libraries(Catch2)
 
 #Compile Wavelet lib
-add_library(LibsModule ${WLETLIBSRC})
-target_link_libraries(LibsModule -lfftw3)
+#add_library(LibsModule ${WLETLIBSRC})
+#target_link_libraries(LibsModule -lfftw3)
 
 #Main program
-set(TARGET "wavebench")
-add_executable(${TARGET} ${EXAMPLES}/${TARGET}.cpp)
-target_link_libraries(${TARGET} LibsModule) # for filesystem: -lstdc++fs)
+#set(TARGET "wavebench")
+#add_executable(${TARGET} ${EXAMPLES}/${TARGET}.cpp)
+#target_link_libraries(${TARGET} LibsModule) # for filesystem: -lstdc++fs)
 
 #Demo program
 set(TARGET "waveletdemo")
