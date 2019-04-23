@@ -170,8 +170,25 @@ TEST_CASE( "Wavelet transforms", "[transforms]" ) {
 	}
 }
 
+//Nested function must be lambda
+auto benchTransform = []( Wavelet<DTYPE> wvlt,
+						  const evector<DTYPE>& signal,
+						  const int& runs,
+						  const int& experiments,
+						  StopWatch& sw) {
+	evector<double> t(experiments);
+	const int osize = WaveletTransform::outputSize(signal.size(), wvlt.size());
+	auto output = evector<DTYPE>(2 * osize);
 
-TEST_CASE( "Benchmark", "[benchmarks]" ) {
+	for (int i=0; i<experiments; ++i) {
+		//cout << "exp: " << i << endl;
+		doTransform(wvlt, signal, output, runs, sw);
+		t[i] = sw.cpuTime();
+	}
+	return t;
+};
+
+TEST_CASE( "Benchmarkdb7", "[benchmarks]" ) {
 	StopWatch sw;
 	auto wvlt = WaveletFactory<DTYPE>::db7();
 	const int experiments = 100;
@@ -179,25 +196,9 @@ TEST_CASE( "Benchmark", "[benchmarks]" ) {
 	const int b1runs = 1;
 
 	//Randomize signal20k
-	generate(signal20k.begin(), signal20k.end(), []() { return rand() % 100;} );
+	generate(signal20k.begin(), signal20k.end(), []() { return rand() % 100; } );
 
-	//Nested function must be lambda
-	auto benchTransform = []( Wavelet<DTYPE> wvlt,
-							   const evector<DTYPE>& signal,
-							   const int& runs,
-							   const int& experiments,
-							   StopWatch& sw) {
-		evector<double> t(experiments);
-		const int osize = WaveletTransform::outputSize(signal.size(), wvlt.size());
-		auto output = evector<DTYPE>(2 * osize);
 
-		for (int i=0; i<experiments; ++i) {
-			//cout << "exp: " << i << endl;
-			doTransform(wvlt, signal, output, runs, sw);
-			t[i] = sw.cpuTime();
-		}
-		return t;
-	};
 
 
 	/**

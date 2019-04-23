@@ -59,6 +59,9 @@ using namespace std;
 
 template<typename T>
 class evector : public vector<T> {
+	//on toString() consider zero if lower than printAsZero
+	//this way avoids printing negative zeros: -0.000
+	static constexpr double printAsZero = 1e-10;
 	static constexpr char defaultSeparator = ' ';
 	static constexpr int defaultPrecision = -1;
 	static constexpr int defaultFixedPrecision = -1;
@@ -81,15 +84,12 @@ public:
 		if (size <= 0)
 			throw std::length_error("Can only extend vectors with size() > 0");
 
-		//check if signal is large enough to symmetric extend
-		//and fix limits
-		/*
-		const int ebfixed   = (size - eb >= 0) ? eb : size;
-		const int eafixed   = (size - ea >= 0) ? ea : size;
-		const int ebresidue = (size - eb >= 0) ?  0 : eb-size;
-		const int earesidue = (size - ea >= 0) ?  0 : ea-size;
-		*/
+
 		//Symmetric extend
+		//check if signal is large enough to symmetric extend.
+		//If NOT extend until its possible and iterate on new partial
+		//extended signal until full extension complete
+
 		int ebfixed = eb;
 		do {
 			size = this->size();
@@ -107,14 +107,8 @@ public:
 		} while (ea > 0);
 
 		/*
-		//extend further with the extreme values, for signals not
-		//large enough to just symmetric extend
-		this->insert(this->begin(), ebresidue, this->front());
-		this->insert(this->end(), earesidue, this->back());
-		*/
-		/*
 		//implementation of: http://wavelet2d.sourceforge.net/ symm_ext()
-		//does nt
+		//does not extend signals smaller than the number of elemnts to extend
 		unsigned int len = this->size();
 		//int l = ??; //number of elements to add at front and back of this vector
 		              //assumes: l = ea = eb
@@ -142,8 +136,13 @@ public:
 		if (fixedPrec>=0) os << fixed << setprecision(fixedPrec);
 
 		os << "[" << sep;
-		for (int i=0; i < this->size(); ++i)
-			os << (*this)[i] << sep;
+		for (int i=0; i < this->size(); ++i) {
+			double val = (*this)[i];
+			//Avoid printing negative zero: -0.0 for very small number near zero
+			if (abs(val) < printAsZero)
+				val = 0.0;
+			os << val << sep;
+		}
 		os << "]";
 		return os.str();
 	}
