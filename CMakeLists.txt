@@ -21,26 +21,33 @@ set(CMAKE_EXE_LINKER_FLAGS  ${GCC_EXTRA_LINK_FLAGS})
 set(SRC "src")
 set(EXAMPLES "examples")
 set(TEST "test")
+set(BIN "bin")
 
 #set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 #set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 #set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ..)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ..)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ..)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ../${BIN})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ../${BIN})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../${BIN})
 
-#hdlib folders
-set(INCLUDE "/home/hdaniel/Dropbox/01-libs/cpp")
+#include folders
+#set(INCLUDE "/home/hdaniel/Dropbox/01-libs/cpp")
+set(INCLUDE "include")
 include_directories(. ${INCLUDE} )
 
 #catch2 lib
-set(CATCH2LIB "${INCLUDE}/catch2/tests-main.o")
+set(CATCH2LIB "${BIN}/tests-main.o")
+set(CATCH2LIBSRC "${INCLUDE}/catch2/tests-main.cpp")
 
 #Wavelet lib
-set(WLETLIBSRC "../00-wavelibsrc/wavelet2s.cpp")
+set(WLETLIBSRC "${INCLUDE}/wavelib/wavelet2s.cpp")
 
 #Project name
-project(04_wavelib_bench)
+project(04_wavelets)
+
+#Compile catch2 lib
+add_library(Catch2 ${CATCH2LIBSRC})
+target_link_libraries(Catch2)
 
 #Compile Wavelet lib
 add_library(LibsModule ${WLETLIBSRC})
@@ -49,12 +56,17 @@ target_link_libraries(LibsModule -lfftw3)
 #Main program
 set(TARGET "wavebench")
 add_executable(${TARGET} ${EXAMPLES}/${TARGET}.cpp)
-target_link_libraries(${TARGET} LibsModule -lstdc++fs)
+target_link_libraries(${TARGET} LibsModule) # for filesystem: -lstdc++fs)
+
+#Demo program
+set(TARGET "waveletdemo")
+add_executable(${TARGET} ${EXAMPLES}/${TARGET}.cpp)
+target_link_libraries(${TARGET})
 
 #Unit tests
 set(UNITTEST "tests")
 add_executable(${UNITTEST} ${TEST}/${UNITTEST}.cpp)
-target_link_libraries(${UNITTEST} ${CATCH2LIB})
+target_link_libraries(${UNITTEST} Catch2)
 
 
 #Run executable

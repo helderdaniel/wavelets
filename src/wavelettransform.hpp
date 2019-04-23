@@ -5,8 +5,9 @@
 #ifndef INC_04_WAVELETS_WAVELETTRANSFORM_HPP
 #define INC_04_WAVELETS_WAVELETTRANSFORM_HPP
 
+#include <cmath>
 #include "wavelet.hpp"
-#include "../src/evector.hpp"
+#include "evector.hpp"
 
 class WaveletTransform {
 
@@ -105,4 +106,4 @@ public:
 
 
 
-#endif //INC_04_WAVELIB_BENCH_WAVELETTRANSFORM_H
+#endif //INC_04_WAVELETS_WAVELETTRANSFORM_HPP

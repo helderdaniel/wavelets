@@ -5,7 +5,7 @@
 #include <sstream>
 #include <string>
 #include <iostream>
-#include <stopwatch/stopwatch.h>
+#include <stopwatch/stopwatch.hpp>
 #include "../src/evector.hpp"
 #include "../src/wavelet.hpp"
 #include "../src/wavelettransform.hpp"
@@ -74,6 +74,7 @@ TEST_CASE( "Wavelets", "[Wavelet]" ) {
 	Wavelet<DTYPE> w0 = WaveletFactory<DTYPE>::haar1();
 	Wavelet<DTYPE> w1 = WaveletFactory<DTYPE>::db1();
 	Wavelet<DTYPE> w2 = WaveletFactory<DTYPE>::db2();
+	Wavelet<DTYPE> w3 = Wavelet("wvlt", evector<DTYPE>{ 1, 2, 3, 4, 5 });
 
 	REQUIRE(w0.name() == "haar1");
 	REQUIRE(w0.size() == 2);
@@ -82,8 +83,8 @@ TEST_CASE( "Wavelets", "[Wavelet]" ) {
 	REQUIRE(w2.name() == "db2");
 	REQUIRE(w2.size() == 4);
 	REQUIRE(w1.toString() == w1.name()+"\nlo: [ 0.707107 0.707107 ]\nhi: [ 0.707107 -0.707107 ]");
+	REQUIRE(w3.toString() == string("wvlt")+"\nlo: [ 1 2 3 4 5 ]\nhi: [ 5 -4 3 -2 1 ]");
 }
-
 
 
 /**
@@ -170,12 +171,14 @@ TEST_CASE( "Wavelet transforms", "[transforms]" ) {
 	}
 }
 
-//Nested function must be lambda
-auto benchTransform = []( Wavelet<DTYPE> wvlt,
-						  const evector<DTYPE>& signal,
-						  const int& runs,
-						  const int& experiments,
-						  StopWatch& sw) {
+//if nested function, must be lambda
+//auto benchTransform = [](
+auto benchTransform (
+			Wavelet<DTYPE> wvlt,
+			const evector<DTYPE>& signal,
+			const int& runs,
+			const int& experiments,
+			StopWatch& sw) {
 	evector<double> t(experiments);
 	const int osize = WaveletTransform::outputSize(signal.size(), wvlt.size());
 	auto output = evector<DTYPE>(2 * osize);
@@ -196,10 +199,8 @@ TEST_CASE( "Benchmarkdb7", "[benchmarks]" ) {
 	const int b1runs = 1;
 
 	//Randomize signal20k
+	srand(time(NULL));
 	generate(signal20k.begin(), signal20k.end(), []() { return rand() % 100; } );
-
-
-
 
 	/**
  	 * Benchmark0 runs a db7 wavelet over a 16 points signal 10000 times

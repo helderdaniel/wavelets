@@ -24,6 +24,31 @@ int _size;
 string _name;
 
 public:
+	/**
+	 *
+	 * @param name: Name of wavelet
+	 * @param lc:   low pass filter coefficient
+	 * 				high pass filter coefficient computed:
+	 * 					invert order of low pass filter coefs
+	 * 					multiply odd indexex by -1
+	 */
+	Wavelet(string name, evector<T> lc) {
+		lopc = lc;
+		//reverse low coefs
+		hipc = evector<T>(lc.rbegin(), lc.rend());
+		//multiply even coefs by -1
+		for(int i = 1; i < hipc.size(); i+=2)
+			hipc[i] *= -1;
+		_size = lc.size();
+		_name = name;
+	}
+
+	/**
+	 *
+	 * @param name: Name of wavelet
+	 * @param lc:   low pass filter coefficient
+	 * @param hc: 	high pass filter coefficient
+	 */
     Wavelet(string name, evector<T> lc, evector<T> hc) {
         lopc = lc;
         hipc = hc;
@@ -81,11 +106,11 @@ public:
                 evector<T>{
                     0.7071067811865476,
                     0.7071067811865476
-                },
+                }/*,
                 evector<T>{
                     0.7071067811865476,
                     -0.7071067811865476
-                });
+                }*/);
     }
 
 
@@ -102,13 +127,13 @@ public:
 						0.83651630373746899,
 						0.22414386804185735,
 						-0.12940952255092145
-				},
+				}/*,
 				evector<T>{
 						-0.12940952255092145,
 						-0.22414386804185735,
 						0.83651630373746899,
 						-0.48296291314469025
-				});
+				}*/);
     }
 
 	static const Wavelet<T> db7() {
@@ -128,7 +153,7 @@ public:
 					0.00042957797300470274,
 					-0.0018016407039998328,
 					0.00035371380000103988
-					},
+					}/*,
 				evector<T> {
 					0.00035371380000103988,
 					0.0018016407039998328,
@@ -144,9 +169,9 @@ public:
 					-0.72913209084655506,
 					0.39653931948230575,
 					-0.077852054085062364
-					} );
+					}*/ );
     }
 };
 
 
-#endif
+#endif //INC_04_WAVELETS_WAVELET_HPP

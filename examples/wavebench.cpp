@@ -17,8 +17,8 @@ http://www.fftw.org/
 #include <fstream>
 #include <thread>
 #include <numeric>
-#include "stopwatch/stopwatch.h"
-#include "../../00-wavelibsrc/wavelet2s.h"
+#include "stopwatch/stopwatch.hpp"
+#include "../include/wavelib/wavelet2s.h"
 #include "../src/evector.hpp"
 #include "../src/wavelet.hpp"
 #include "../src/wavelettransform.hpp"

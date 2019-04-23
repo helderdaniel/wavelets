@@ -1,21 +1,13 @@
-# wavelets
-Simple wavelets implementation
-
-
-Some fast wavelet processing implementation.
-
-Implemented wavelets so far:
-    Haar1, db1 (Haar1), db2, db7
-
-
-Example below (available at examples folder) calls Discrete Wavelet Transform on input signal.
-Compile it with at least g++ v7 and make sure c++17 standard is specified:
-
-g++-7 waveletdemo.cpp -o waveletdemo -std=c++17
-
-
-```
-//This is waveletdemo.cpp from examples/ folder
+/**
+ * Simple Wavelets demo
+ * 
+ * hdaniel@ualg.pt apr 2019
+ *
+ * compile with:
+ *
+ * g++-7 waveletdemo.cpp -o waveletdemo -std=c++17
+ *
+ */
 
 //include wavelet and extended vector
 #include "../src/evector.hpp"
@@ -47,17 +39,3 @@ int main() {
 
 	return 0;
 }
-```
-
-It should display:
-
-```
-Input signal:
-[ 32 10 20 38 37 28 38 34 18 24 18 9 23 24 28 34 ]
-
-Discrete Wavelet Transform (db7):
-[ 23.6753 43.1243 47.6845 47.4638 29.454 33.2002 31.8586 46.3168 50.7474 38.5833 22.8656 24.84 39.7161 46.2875 -12.0386 17.2375 -13.2662 13.1351 -7.52492 -4.17754 9.21827 -0.83275 -0.956452 1.87084 -6.60709 -1.54342 9.6809 -6.64522 ]
-```
-
-
-

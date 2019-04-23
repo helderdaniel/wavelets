@@ -89,7 +89,7 @@ public:
 		//check if signal is large enough to symmetric extend.
 		//If NOT extend until its possible and iterate on new partial
 		//extended signal until full extension complete
-
+		//TODO: maybe these loops can be simpler
 		int ebfixed = eb;
 		do {
 			size = this->size();
@@ -139,7 +139,7 @@ public:
 		for (int i=0; i < this->size(); ++i) {
 			double val = (*this)[i];
 			//Avoid printing negative zero: -0.0 for very small number near zero
-			if (abs(val) < printAsZero)
+			if (std::abs(val) < printAsZero)
 				val = 0.0;
 			os << val << sep;
 		}
@@ -164,4 +164,4 @@ ostream& operator<<(ostream& os, const evector<T>& v) {
 	return os;
 }
 
-#endif //INC_04_WAVELIB_BENCH_EVECTOR_H
+#endif //INC_04_WAVELETS_EVECTOR_HPP
