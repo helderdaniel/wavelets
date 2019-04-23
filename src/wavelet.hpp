@@ -2,8 +2,8 @@
  * Wavelet base implementation
  * hdaniel@ualg.pt apr 2019
  */
-#ifndef INC_04_WAVELIB_BENCH_WAVELET_HPP
-#define INC_04_WAVELIB_BENCH_WAVELET_HPP
+#ifndef INC_04_WAVELETS_WAVELET_HPP
+#define INC_04_WAVELETS_WAVELET_HPP
 
 #include "../src/evector.hpp"
 using namespace std;

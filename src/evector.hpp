@@ -2,8 +2,8 @@
 // Created by hdaniel on 20/04/19.
 //
 
-#ifndef INC_04_WAVELIB_BENCH_EVECTOR_HPP
-#define INC_04_WAVELIB_BENCH_EVECTOR_HPP
+#ifndef INC_04_WAVELETS_EVECTOR_HPP
+#define INC_04_WAVELETS_EVECTOR_HPP
 
 
 /*
@@ -68,16 +68,56 @@ public:
 	using vector<T>::vector; //use the constructors from vector
 
 	/**
-	 * Extend signal to handle wavelet around boundaries
-	 * Symmetric extension
-  	 */
-	void symmExt(int l) {
-		unsigned int len = this->size();
+	 * Extend vector, symmetric extension
+	 *
+	 * @param eb: number of elements to add at the beginning
+	 * @param ea: number of elements to add at the end
+	 *
+	 * Example: { 1, 2 }.symmExt(3,3) = { 2, 2, 1, 1, 2, 2, 1, 1}
+	 *
+	 */
+	void symmExt(int eb, int ea) {
+		int size = this->size();
+		if (size <= 0)
+			throw std::length_error("Can only extend vectors with size() > 0");
 
-		this->insert(this->begin(), this->rend()-l, this->rend());
-		this->insert(this->end(), this->rbegin(), this->rbegin()+l);
+		//check if signal is large enough to symmetric extend
+		//and fix limits
 		/*
-		implementation of: http://wavelet2d.sourceforge.net/ symm_ext()
+		const int ebfixed   = (size - eb >= 0) ? eb : size;
+		const int eafixed   = (size - ea >= 0) ? ea : size;
+		const int ebresidue = (size - eb >= 0) ?  0 : eb-size;
+		const int earesidue = (size - ea >= 0) ?  0 : ea-size;
+		*/
+		//Symmetric extend
+		int ebfixed = eb;
+		do {
+			size = this->size();
+			if (size - eb <= 0) { ebfixed = size; eb -= size; }
+			else 				{ ebfixed = eb; eb = 0; }
+			this->insert(this->begin(), this->rend()-ebfixed, this->rend());
+		} while (eb > 0);
+
+		int eafixed = ea;
+		do {
+			size = this->size();
+			if (size - ea <= 0) { eafixed = size; ea -= size; }
+			else 				{ eafixed = ea; ea = 0; }
+			this->insert(this->end(), this->rbegin(), this->rbegin()+eafixed);
+		} while (ea > 0);
+
+		/*
+		//extend further with the extreme values, for signals not
+		//large enough to just symmetric extend
+		this->insert(this->begin(), ebresidue, this->front());
+		this->insert(this->end(), earesidue, this->back());
+		*/
+		/*
+		//implementation of: http://wavelet2d.sourceforge.net/ symm_ext()
+		//does nt
+		unsigned int len = this->size();
+		//int l = ??; //number of elements to add at front and back of this vector
+		              //assumes: l = ea = eb
 		for (int i =0; i < l; i++) {
 			//rewrite with out cycle
 			T temp1 = (*this)[i * 2];
