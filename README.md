@@ -2,15 +2,15 @@
 Some fast wavelet processing implementation.
 
 Currently implemented algorithms:
-    * Discrete wavelet transform
+- Discrete wavelet transform
 
 Implemented wavelets so far:
-    * Haar1, db1 (Haar1), db2, db7
-    * sym3
-    * coif4
-    * bior6.8, rbio6.8
+- Haar1, db1 (Haar1), db2, db7
+- sym3
+- coif4
+- bior6.8, rbio6.8
 
-## Example
+### Example of use
 Example below (available at examples folder) calls Discrete Wavelet Transform on input signal.
 Compile it with at least g++ v7 and make sure c++17 standard is specified:
 
