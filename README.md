@@ -1,20 +1,22 @@
-# wavelets
-Simple wavelets implementation
-
-
+# Simple 1D wavelets lib for C++
 Some fast wavelet processing implementation.
 
+Currently implemented algorithms:
+    * Discrete wavelet transform
+
 Implemented wavelets so far:
-    Haar1, db1 (Haar1), db2, db7
+    * Haar1, db1 (Haar1), db2, db7
+    * sym3
+    * coif4
+    * bior6.8, rbio6.8
 
-
+## Example
 Example below (available at examples folder) calls Discrete Wavelet Transform on input signal.
 Compile it with at least g++ v7 and make sure c++17 standard is specified:
 
-g++-7 waveletdemo.cpp -o waveletdemo -std=c++17
+> g++-7 waveletdemo.cpp -o waveletdemo -std=c++17
 
-
-```
+```c++
 //This is waveletdemo.cpp from examples/ folder
 
 //include wavelet and extended vector
@@ -59,5 +61,36 @@ Discrete Wavelet Transform (db7):
 [ 23.6753 43.1243 47.6845 47.4638 29.454 33.2002 31.8586 46.3168 50.7474 38.5833 22.8656 24.84 39.7161 46.2875 -12.0386 17.2375 -13.2662 13.1351 -7.52492 -4.17754 9.21827 -0.83275 -0.956452 1.87084 -6.60709 -1.54342 9.6809 -6.64522 ]
 ```
 
+## Related works
+The C++ implementation in this repo, follows the Wavelet coefficients as defined in the Python module: **pywt**.
+
+https://www.pybytes.com/pywavelets/
+
+Note that the coefficients reported in:
+
+http://wavelets.pybytes.com/
+
+are NOT correct with the **pywt** module.
+
+To check the coefficients of the Python module was used the snippet:
+
+```
+wavelets = ['haar', 'db7', 'sym3', 'coif4', 'bior6.8', 'rbio6.8' ]  #...
+w = wavelets[1] #select db7 wavelet
+
+print(pywt.Wavelet(w).dec_lo)   #get low  pass filter coefficients
+print(pywt.Wavelet(w).dec_hi)   #get high pass filter coefficients
+```
+
+The C++ implementation defined in:
+
+http://wavelet2d.sourceforge.net/
+
+have different coefficients for some wavelets.
+This lib uses fftw3 lib:
+
+http://www.fftw.org/
+
+for Fast Fourier Transforms.
 
 
