@@ -29,8 +29,13 @@ class WaveletTransform {
 		for (int i=0; i<output.size(); i+=2) {
 			double t=0;
 			for (int j=0; j<ncoefs; ++j)
+				//Assume symmetric wavelet coefficients for
+				//fast convolution loop indexing
+				//otherwise accessing wcoefs introduces
+				//2 more operations in loop body:
+				//t += input[i+j] * wcoefs[ncoefs-j-1];
 				t += input[i+j] * wcoefs[j];
-			output[n++]=t;
+				output[n++]=t;
 		}
 		return n;
 	}
@@ -46,7 +51,7 @@ public:
 	 * @return length of transform output vector
 	 */
 	static int outputSize(int inputSize, int wletnCoefs) {
-		int n = ceil((inputSize+wletnCoefs)/2.0)-1; //divide by 2.0 to avoid integer division (which rounds and NOT ceils)
+		int n = floor((inputSize+wletnCoefs-1)/2.0); //divide by 2.0 to avoid integer division (which rounds and NOT ceils)
 		return n;
 	}
 
@@ -97,9 +102,10 @@ public:
 		//better to have it dimensioned outside, for the maximum, just once
 		//check this!!!
 
-		//dwt low and hugh pass
-		int n = dwtp(w.lopf(), inputExt, output, 0);
-		dwtp(w.hipf(), inputExt, output, n);
+		//dwt use low and high pass symmetric wavelet coefficients for
+		//fast convolution loop indexing
+		int n = dwtp(w.lopfsym(), inputExt, output, 0);
+		dwtp(w.hipfsym(), inputExt, output, n);
 	}
 
 };
