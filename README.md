@@ -1,10 +1,13 @@
-# Simple 1D wavelets lib for C++
-Some fast wavelet processing implementation.
+# Simple 1D fast wavelet transform
+Some fast wavelet processing implementation using (Mallat, 1989, 2009) algorithm.
 
-Currently implemented algorithms:
+Currently implemented operations:
 - Discrete wavelet transform
+Todo:
+- Inverse wavelet transform
+- Wavelet tree
 
-Implemented wavelets so far:
+Defined wavelets coefficients, so far:
 - Haar1, db1 (Haar1), db2, db7
 - sym3
 - coif4
@@ -92,5 +95,9 @@ This lib uses fftw3 lib:
 http://www.fftw.org/
 
 for Fast Fourier Transforms.
+
+### References
+Mallat, S. G. (1989). “A Theory for Multiresolution Signal Decomposition: The Wavelet Representation,” IEEE Transactions on Pattern Analysis and Machine Intelligence. Vol. 11, Issue 7, July 1989, pp. 674–693.
+Mallat, S. G. (2009). "A wavelet tour of signal processing: the sparse way", Academic Press, 1998, 3rd edn. 2009
 
 
