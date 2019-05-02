@@ -93,7 +93,7 @@ evector<int> length;
 		WaveletTransform::dwt<double>(wvlt, signal, output1);
 	}
     sw.lap();
-    double rt0 = sw.cpuTime();
+    double rt0 = sw.watch();
     cout << sw << endl;
 
     sw.reset();
@@ -102,7 +102,7 @@ evector<int> length;
 		dwt_sym(signal, 1, wvlt.name(), output2, flag, length);
 	}
     sw.lap();
-	double rt1 = sw.cpuTime();
+	double rt1 = sw.watch();
     cout << sw << endl;
 
     cout << output1.size() << endl;

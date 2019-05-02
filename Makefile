@@ -6,7 +6,7 @@ CC=g++-8
 
 #INCLUDE     = /home/hdaniel/Dropbox/01-libs/cpp
 INCLUDE      = include
-CFLAGS       = -Ofast -std=c++17 -I$(INCLUDE)
+CFLAGS       = -Ofast -std=c++17 -I$(INCLUDE) -fopenmp
 		        #-g
 LDFlags      = #-lfftw3 -lstdc++fs
 

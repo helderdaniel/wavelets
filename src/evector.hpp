@@ -76,6 +76,7 @@ public:
 	 * @param eb: number of elements to add at the beginning
 	 * @param ea: number of elements to add at the end
 	 *
+	 * PRE: this.size() > 0
 	 * Example: { 1, 2 }.symmExt(3,3) = { 2, 2, 1, 1, 2, 2, 1, 1}
 	 *
 	 */

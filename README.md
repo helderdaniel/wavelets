@@ -97,7 +97,7 @@ http://www.fftw.org/
 for Fast Fourier Transforms.
 
 ### References
-Mallat, S. G. (1989). “A Theory for Multiresolution Signal Decomposition: The Wavelet Representation,” IEEE Transactions on Pattern Analysis and Machine Intelligence. Vol. 11, Issue 7, July 1989, pp. 674–693.
+Mallat, S. G. (1989). “A Theory for Multiresolution Signal Decomposition: The Wavelet Representation", IEEE Transactions on Pattern Analysis and Machine Intelligence. Vol. 11, Issue 7, July 1989, pp. 674–693.
 
 Mallat, S. G. (2009). "A wavelet tour of signal processing: the sparse way", Academic Press, 1998, 3rd edn. 2009
 
