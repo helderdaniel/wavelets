@@ -263,13 +263,14 @@ TEST_CASE( "Wavelet transforms utils", "[transforms]" ) {
 	}
 }
 
-TEMPLATE_TEST_CASE( "Wavelet transforms", "[transforms]", SEQ, PAR/*, GPU*/) {
+TEMPLATE_TEST_CASE( "Wavelet transforms", "[transforms]", SEQ, PAR, GPU) {
 	SECTION("DWThaar1") {
 		evector<DTYPE> output;
 		REQUIRE_THROWS_AS(
 				WaveletTransform::dwt<DTYPE>(haar1, signal0, output),
 				std::length_error);
 		testTransform<DTYPE, TestType>(haar1, signal16, sig16haar1);
+		//testTransform<DTYPE, GPU> (db1, signal1, sig1db1);
 	}
 	SECTION("DWTdb1") {
 		testTransform<DTYPE, TestType> (db1, signal1, sig1db1);

@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_COMPILER /usr/bin/g++-8)
 #set(CMAKE_CXX_COMPILER /usr/bin/clang++-7)  #clang++-8 NOT avail in ubuntu 15 apr 2019
 
-set(GCC_EXTRA_COMPILE_FLAGS "-Ofast -fopenmp")
-#set(GCC_EXTRA_COMPILE_FLAGS "-O0 -g -fopenmp")
+#set(GCC_EXTRA_COMPILE_FLAGS "-Ofast -fopenmp")
+set(GCC_EXTRA_COMPILE_FLAGS "-O0 -g -fopenmp")
 set(GCC_EXTRA_LINK_FLAGS    "")
 
 #reset existing
@@ -53,13 +53,18 @@ target_link_libraries(Catch2)
 #add_library(LibsModule ${WLETLIBSRC})
 #target_link_libraries(LibsModule -lfftw3)
 
-#Main program
+#Old Main program
 set(TARGET "wavebench")
 #add_executable(${TARGET} ${EXAMPLES}/${TARGET}.cpp)
 #target_link_libraries(${TARGET} LibsModule) # for filesystem: -lstdc++fs)
 
 #Demo program
 set(TARGET "waveletdemo")
+add_executable(${TARGET} ${EXAMPLES}/${TARGET}.cpp)
+target_link_libraries(${TARGET})
+
+#Par cross-correlation tests
+set(TARGET "parcrosscorrelation")
 add_executable(${TARGET} ${EXAMPLES}/${TARGET}.cpp)
 target_link_libraries(${TARGET})
 

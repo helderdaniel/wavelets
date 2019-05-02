@@ -20,7 +20,8 @@ BIN		 = bin
 #make mainfile=<filename-no-extension>
 mainfile = wavebench
 testfile = tests
-demofile = waveletdemo
+demofile1 = waveletdemo
+demofile2 = parcrosscorrelation
 
 CATCH2LIB    = tests-main
 CATCH2LIBSRC = $(INCLUDE)/catch2/$(CATCH2LIB).cpp
@@ -36,8 +37,11 @@ $(BIN)/$(mainfile): $(BIN)/$(CATCH2LIB).o $(BIN)/$(WLETLIB).o $(EXAMPLES)/$(main
 $(BIN)/$(testfile): $(BIN)/$(CATCH2LIB).o $(BIN)/$(WLETLIB).o $(TESTS)/$(testfile).cpp $(SRC)/evector.hpp $(SRC)/wavelet.hpp $(SRC)/wavelettransform.hpp
 	$(CC) $(TESTS)/$(testfile).cpp $(BIN)/$(CATCH2LIB).o $(CFLAGS) -o $(BIN)/$(testfile) $(LDFlags)
 
-$(BIN)/$(demofile): $(EXAMPLES)/$(demofile).cpp $(SRC)/evector.hpp $(SRC)/wavelet.hpp $(SRC)/wavelettransform.hpp
-	$(CC) $(EXAMPLES)/$(demofile).cpp $(CFLAGS) -o $(BIN)/$(demofile) $(LDFlags)
+$(BIN)/$(demofile1): $(EXAMPLES)/$(demofile1).cpp $(SRC)/evector.hpp $(SRC)/wavelet.hpp $(SRC)/wavelettransform.hpp
+	$(CC) $(EXAMPLES)/$(demofile1).cpp $(CFLAGS) -o $(BIN)/$(demofile1) $(LDFlags)
+
+$(BIN)/$(demofile2): $(EXAMPLES)/$(demofile2).cpp $(SRC)/evector.hpp $(SRC)/wavelet.hpp $(SRC)/wavelettransform.hpp
+	$(CC) $(EXAMPLES)/$(demofile2).cpp $(CFLAGS) -o $(BIN)/$(demofile2) $(LDFlags)
 
 $(BIN)/$(CATCH2LIB).o:
 	$(CC) $(CATCH2LIBSRC) $(CFLAGS) $(LDFlags) -c -o $(BIN)/$(CATCH2LIB).o
