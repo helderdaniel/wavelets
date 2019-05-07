@@ -37,10 +37,10 @@ public:
 
 		//DWT
 		//use low and high pass symmetric wavelet coefficients to achieve
-		//faster convolution using cross-correlation
+		//faster convolution using cross-CORRELATION
 		CrossCorrelation<T, tag>::execute(inputExt, w.lopfsym(), output, 0);
 		CrossCorrelation<T, tag>::execute(inputExt, w.hipfsym(), output, output.size()/2);
-		//Non-symmetric wavelet coefficients gives cross-correlation
+		//Non-symmetric wavelet coefficients gives cross-CORRELATION
 		//CrossCorrelation::execute(inputExt, w.lopf(), output, 0);
 		//CrossCorrelation::execute(inputExt, w.hipf(), output, output.size()/2);
 	}

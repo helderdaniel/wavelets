@@ -11,7 +11,8 @@
 #define __ARCHTYPES_H__
 
 class SEQ {};	//Single core
-class PAR {};	//Multi-core (multi-CPU) (OPENMP, THREADS)
+class PAR {};	//Multi-core (multi-CPU) (OPENMP)
+class PARa {};	//Alternate Multi-core (multi-CPU) (manual THREADS)
 //class MPI {};	//Message-passing clusters with MPI
 class GPU {};	//GPU
 

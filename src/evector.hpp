@@ -109,7 +109,7 @@ public:
 
 		/*
 		//implementation of: http://wavelet2d.sourceforge.net/ symm_ext()
-		//does not extend signals smaller than the number of elemnts to extend
+		//does not extend signals smaller than the number of elements to extend
 		unsigned int len = this->size();
 		//int l = ??; //number of elements to add at front and back of this vector
 		              //assumes: l = ea = eb
@@ -156,6 +156,38 @@ public:
 	//string toString(int fixedPrec) { return toString(defaultSeparator, defaultPrecision, fixedPrec); }
 
 	//friend ostream& operator<<(ostream& os, const evector<T>& v);
+
+	/**
+	 * PRE: a.size() == b.size()
+	 * POS: return have a.size()
+	 *
+	 * @param vector subtraction
+	 * @return
+	 */
+	 /*
+	  * BUggy
+	evector<T>& operator-=(const evector<T>&a) {
+		for (int i=0; i<a.size(); ++i)
+			*this[i]-=a[i];
+		return *this;
+	}
+
+	friend evector<T> operator-(evector<T>&a, const evector<T>& b) {
+		return a-=b;
+	}
+
+	inline bool operator<(const T&a){
+		for (int i=0; i<a.size(); ++i)
+			if (!(*this[i]<a[i])) return false;
+		return true;
+	}
+
+	friend inline bool operator<(const evector<T>&a, const evector<T>& b){
+		for (int i=0; i<a.size(); ++i)
+			if (!(a[i]<b[i])) return false;
+		return true;
+	}
+	*/
 };
 
 

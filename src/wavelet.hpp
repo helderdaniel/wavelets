@@ -98,7 +98,7 @@ public:
     /**
      * returns the number of coefficients in low and high pass filters
      */
-    const int size() const { return _size; }
+    int size() const { return _size; }
 
 	/**
      * returns the name of the wavelet

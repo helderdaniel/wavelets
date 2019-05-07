@@ -36,33 +36,15 @@
 #include <thread>
 #include <future>
 #include "../src/archtypes.h"
+#include "ccorrelationbase.h"
 
-/*
- * Macro to define the convolution loops,
- * which might be object of #pragma omp parallel for
+
+/**
+ * Classes to implement implements cross-correlation
  *
- * needs to be a macro, so that the for loop will be expanded
- * right after #pragma
- * an inline function will NOT do, since #pragma will be
- * before the function call and NOT the loop
+ * @tparam T 	element type: double, float, ...
+ * @tparam tag  implementation: SEQ, PAR, GPU
  */
-//#define crossc(input,filter,ncoefs,output,pos)
-//	for (int i = 0; i < output.size(); i+=2) {
-#define crossc(input,filter,ncoefs,output,start,end,pos) \
-	for (int i = start; i < end; i+=2) { \
-		T t=0; \
-		for (int j=0; j < ncoefs; ++j) \
-			t += input[i+j] * filter[j]; \
-		output[pos+i/2]=t; \
-	}
-
-//Call crossc macro for thread launch
-template <typename T>
-void crosscf(const evector<T> &input, const evector<T> &filter,
-					evector<T> &output, int start, int end, int pos) {
-	crossc(input,filter,filter.size(),output, start, end, pos);
-}
-
 template<class T, class tag=SEQ>
 class CrossCorrelation {
 public:
@@ -85,7 +67,7 @@ class CrossCorrelation<T, SEQ> {
 public:
 	static void execute(const evector<T> &input, const evector<T> &filter,
 						evector<T> &output, int pos) {
-		crossc(input, filter, filter.size(), output, 0, output.size(), pos);
+		CROSSC(T, input, filter, filter.size(), output, 0, output.size(), pos);
 	}
 
 }; //template class CrossCorrelation SEQ
@@ -122,24 +104,11 @@ public:
 		//This is the default affinity policy
 		{
 			#pragma omp parallel for num_threads(4)
-			crossc(input, filter, filter.size(), output, 0, output.size(), pos);
+			CROSSC(T, input, filter, filter.size(), output, 0, output.size(), pos);
 		}
 	}
 
 }; //template class CrossCorrelation PAR
-
-
-template<class T>
-class CrossCorrelation<T, GPU> {
-public:
-	static void execute(const evector<T> &input, const evector<T> &filter,
-						evector<T> &output, int pos) {
-		//NOW is same as SEQ
-		//Substitute by GPU here
-		crossc(input, filter, filter.size(), output, 0, output.size(), pos);
-	}
-
-}; //template class CrossCorrelation GPU
 
 
 /** Alternate version of multi-thread implementation
@@ -147,31 +116,54 @@ public:
  * For vectors x1000 larger (20 000 000) both implementations have the
  * same performance
  */
-/*
-#define NUMTHREADS 4
+#define PARaNUMTHREADS 4
 template<class T>
-class CrossCorrelation<T, GPU> {
+class CrossCorrelation<T, PARa> {
+
+	//Call CROSSC() macro just for CPU thread launch
+	inline static void crosscf(const evector<T> &input, const evector<T> &filter,
+			  				   evector<T> &output, int start, int end, int pos) {
+		CROSSC(T, input,filter,filter.size(),output, start, end, pos);
+	}
+
 public:
 	static void execute(const evector<T> &input, const evector<T> &filter,
 						evector<T> &output, int pos) {
-		future<void> t[NUMTHREADS];
-		int parlen = ceil(((float)output.size()) / NUMTHREADS);
+		future<void> t[PARaNUMTHREADS];
+		int parlen = ceil(((float)output.size()) / PARaNUMTHREADS);
 		if (parlen%2==1) ++parlen;
 
 		///Need to launch every thread at the same time first...
-		for (int i = 0; i < NUMTHREADS; ++i) {
+		for (int i = 0; i < PARaNUMTHREADS; ++i) {
 			int limit = parlen * (i + 1);
 			if (limit > output.size()) limit = output.size();
-			t[i] = async(std::launch::async, crosscf<T>, ref(input), ref(filter),
+			t[i] = async(std::launch::async, crosscf, ref(input), ref(filter),
 							   ref(output), parlen * i, limit, pos);
 		}
 
 		///and then wait for all threads to end
-		for (int i = 0; i < NUMTHREADS; ++i)
+		for (int i = 0; i < PARaNUMTHREADS; ++i)
 			t[i].get();
 	}
 
 }; //template class CrossCorrelation PAR (alternate)
-*/
+
+
+template<class T>
+class CrossCorrelation<T, GPU> {
+
+public:
+	static void execute(const evector<T> &input, const evector<T> &filter,
+						evector<T> &output, int pos) {
+
+		extern void ccorrelation(const evector<T> &input, const evector<T> &filter, evector<T> &output, int pos);
+
+		//launch GPU threads
+		ccorrelation(input,filter,output,pos);
+		//CROSSC(T, input, filter, filter.size(), output, 0, output.size(), pos);
+	}
+
+}; //template class CrossCorrelation GPU
+
 
 #endif //__CROSS_CORRELATION_HPP__

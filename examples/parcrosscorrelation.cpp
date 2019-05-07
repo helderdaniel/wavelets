@@ -28,13 +28,13 @@ struct result {
 	int cpu;
 };
 
-//Call crossc macro for thread launch returning
+//Call CROSSC macro for thread launch returning
 template <typename T>
 result<int> convolution(const evector<T> &input, const evector<T> &filter,
 						evector<T> &output, int start, int end, int pos, int par=0) {
 
 	#pragma omp parallel for if(par) //num_threads(4)
-	crossc(input,filter,filter.size(),output, start, end, pos);
+	CROSSC(T,input,filter,filter.size(),output, start, end, pos);
 
 	result<int> r{ 0, sched_getcpu() };
 	return r;
