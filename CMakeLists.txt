@@ -50,17 +50,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../${BIN})
 
 #include folders
 set(INCLUDE "/home/hdaniel/Dropbox/01-libs/cpp")# "/usr/local/cuda-9.0/include")
-#set (LOCAL_INCLUDE "include")
-#set(INCLUDE ${LOCAL_INCLUDE} ) #"/usr/local/cuda-9.0/include")
 include_directories(. ${INCLUDE} )
 
 #catch2 lib
 set(CATCH2LIB "${BIN}/tests-main.o")
-#set(CATCH2LIBSRC "${LOCAL_INCLUDE}/catch2/tests-main.cpp")
 set(CATCH2LIBSRC "${INCLUDE}/catch2/tests-main.cpp")
 
 #Wavelet lib
-#set(WLETLIBSRC "${LOCAL_INCLUDE}/wavelib/wavelet2s.cpp")
 set(WLETLIBSRC "${INCLUDE}/wavelib/wavelet2s.cpp")
 
 #GPU cross correlation
