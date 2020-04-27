@@ -6,6 +6,8 @@
 
 #include <cuda.h>
 #include <cuda_runtime.h>
+#include <cmath>
+#include <iostream>
 #include "ccorrelationbase.h"
 #include "evector.hpp"
 
@@ -19,27 +21,16 @@ using namespace std;
 
 #define DTYPE double
 
-/*
-#define DOWNSAMPLE 2
-#define CROSSC2(T, input,filter,ncoefs,output,start,end,pos) \
-	//for (int i = start; i < end; i += DOWNSAMPLE)  \
-	{ \
-		T t = 0; \
-		const int i = start; \
-		for (int j = 0; j < ncoefs; ++j) \
-			t += input[i + j] * filter[j]; \
-		output[pos + i / DOWNSAMPLE] = t; \
-	}
-*/
 
 //GPU kernel function
+#define SPREAD 1 //No apparent gain in spreading the process of more than an elemnt by thread
 __global__
 void cckernel(const DTYPE *input, const DTYPE *filter, int ncoefs, DTYPE *output, int osize, int pos) {
     const int threadId = blockIdx.x * blockDim.x + threadIdx.x;
-    const int inputIdx = threadId * DOWNSAMPLE; //Dual downsample
+    const int inputIdx = threadId * DOWNSAMPLE * SPREAD; //Dual downsample
 
-    if (threadId < osize) {
-		CROSSC(DTYPE,input,filter,ncoefs,output,inputIdx,inputIdx+1,pos);
+    if (inputIdx < osize) {
+		CROSSC(DTYPE,input,filter,ncoefs,output,inputIdx,inputIdx+SPREAD*DOWNSAMPLE,pos);
 		//CORRELATION(DTYPE,input,filter,ncoefs,output,pos,inputIdx);
     }
 }
@@ -61,8 +52,8 @@ void ccorrelation(const evector<DTYPE> &input, const evector<DTYPE> &filter,
 	cudaMemcpy(gfilter, filter.data(), sizeof(DTYPE)*filter.size(), cudaMemcpyHostToDevice);
 
 	//launch GPU threads
-	int rows = ceil(((float)input.size())/DOWNSAMPLE/256); //force floating point
-	int cols = ceil(((float)input.size())/DOWNSAMPLE/rows);
+	int cols = 256/SPREAD;
+	int rows = ceil(((float)input.size())/DOWNSAMPLE/cols); //force floating point
 	#ifdef DEBUG
 		cout << rows << "x" << cols << endl;
 	#endif
@@ -76,6 +67,13 @@ void ccorrelation(const evector<DTYPE> &input, const evector<DTYPE> &filter,
 	cudaFree(goutput);
 	cudaFree(goutput);
 }
+//CREATE CUDA class
+//on constructor verify cuda availability
+//https://github.com/deeperlearning/professional-cuda-c-programming/blob/master/solutions/common/common.h
+////also CHECKCUDA from addvector cuda project?
+
+//do warmup
+//https://github.com/deeperlearning/professional-cuda-c-programming/blob/master/examples/chapter03/simpleDivergence.cu
 
 
 #ifdef DEBUG
@@ -88,10 +86,12 @@ evector<DTYPE> input = { 32, 10, 20, 38, 37, 28, 38, 34, 18, 24, 18, 9, 23, 24, 
 //evector<DTYPE> input = { 32, 10 };
 evector<DTYPE> filter = { 0.7071067811865476, 0.7071067811865476 };
 const int osize = WaveletTransform::outputSize(input.size(), w.size());
-auto output = evector<DTYPE>(2 * osize);
+auto output = evector<DTYPE>(DOWNSAMPLE * osize);
 
 	ccorrelation(input, w.lopf(), output, 0);
-	ccorrelation(input, w.hipfsym(), output, output.size()/2);
+	ccorrelation(input, w.hipfsym(), output, output.size()/DOWNSAMPLE);
+	cout << input.toString(5) << endl;
+	cout << filter.toString(5) << endl;
 	cout << output.toString(5) << endl;
 	return 0;
 }

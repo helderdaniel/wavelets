@@ -210,13 +210,10 @@ template<class T, class tag>
 void doTransform(Wavelet<T> wvlt,
 				 const evector<T>& signal,
 				 evector<T>& output,
-				 const int runs,
-				 StopWatch &sw ) {
-	sw.reset();
+				 const int runs) {
+
 	for (int i=0; i<runs; ++i)
-		//DWT
 		WaveletTransform::dwt<T, tag>(wvlt, signal, output);
-	sw.lap();
 }
 
 /**
@@ -227,13 +224,14 @@ void doTransform(Wavelet<T> wvlt,
  * @param expected 	string with evector output of transform operation
  */
 template<class T, class tag>
-void testTransform (Wavelet<DTYPE> wvlt,
+void
+testTransform (Wavelet<DTYPE> wvlt,
 					const evector<DTYPE>& signal,
 					const string& expected) {
 	StopWatch sw;
 	const int osize = WaveletTransform::outputSize(signal.size(), wvlt.size());
-	auto output = evector<T>(2 * osize);
-	doTransform<T, tag>(wvlt, signal, output, 1, sw);
+	auto output = evector<T>(DOWNSAMPLE * osize);
+	doTransform<T, tag>(wvlt, signal, output, 1);
 	REQUIRE(output.toString(' ', -1, decimalDigits) == expected);
 	//REQUIRE(output - expected < MAX_ERROR);
 };
@@ -244,8 +242,8 @@ void testTransform1 (Wavelet<DTYPE> wvlt,
 					const evector<DTYPE>& expected) {
 	StopWatch sw;
 	const int osize = WaveletTransform::outputSize(signal.size(), wvlt.size());
-	auto output = evector<T>(2 * osize);
-	doTransform<T, tag>(wvlt, signal, output, 1, sw);
+	auto output = evector<T>(DOWNSAMPLE * osize);
+	doTransform<T, tag>(wvlt, signal, output, 1;
 	REQUIRE((output - expected) < MAX_ERROR);
 };
 */
@@ -342,19 +340,21 @@ auto benchTransform (
 	evector<double> t(experiments);
 	//dim output for maximum len wavelet
 	const int osize = WaveletTransform::outputSize(signal.size(), bior6_8.size());
-	auto output = evector<T>(2 * osize);
+	auto output = evector<T>(DOWNSAMPLE * osize);
 
 	for (int i=0; i<experiments; ++i) {
 		//cout << "exp: " << i << endl;
+		sw.reset();
 		for (auto wvlt : wvlts)
-			doTransform<T, tag>(wvlt, signal, output, runs, sw);
+			doTransform<T, tag>(wvlt, signal, output, runs);
 
 		//Is about 15% slower
 		//#pragma omp parallel for
 		//required old for style by #pragma omp
 		/*for (int i=0; i<wvlts.size(); ++i)
-			doTransform<T, tag>(wvlts[i], signal, output, runs, sw);
+			doTransform<T, tag>(wvlts[i], signal, output, runs);
 		*/
+		sw.lap();
 		t[i] = sw.watch();
 	}
 	return t;

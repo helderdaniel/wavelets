@@ -155,6 +155,7 @@ public:
 	//Cannot do the next overload, cause signature is equal to previous overloaded func: toString(int)
 	//string toString(int fixedPrec) { return toString(defaultSeparator, defaultPrecision, fixedPrec); }
 
+	//template <typename T>
 	//friend ostream& operator<<(ostream& os, const evector<T>& v);
 
 	/**

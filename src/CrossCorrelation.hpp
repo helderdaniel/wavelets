@@ -20,13 +20,14 @@
  * This is used in WaveletTransform class where Wavelet objects have
  * coefficients by the reverse order (x-axis symmetric).
  *
+ *  #define DOWNSAMPLE 2
  *  int ncoefs = filter.size();
- *	for (int i=0; i < output.size(); i+=2) {
+ *	for (int i=0; i < output.size(); i+=DOWNSAMPLE) {
  *		T t=0;
  *		for (int j=0; j < ncoefs; ++j)
- *			t += input[i+j] * filter[j];		  //(1) Cross-correlation
- * 			t += input[i+j] * filter[ncoefs-j-1]; //(2) Convolution (x-symmetric filter)
- *		output[pos+i/2]=t;
+ *			t += input[i+j] * filter[j];		  //i)  Cross-correlation
+ * 			t += input[i+j] * filter[ncoefs-j-1]; //ii) Convolution (x-symmetric filter)
+ *		output[pos+i/DOWNSAMPLE]=t;
  *	}
  */
 

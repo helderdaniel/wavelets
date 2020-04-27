@@ -30,19 +30,19 @@ public:
 		inputExt.symmExt(extBeforeSize(w.size()),
 						 extAfterSize(w.size(), input.size()));
 
-		//redim vector here is a BAD idea
-		//output = evector<double>(2*(ceil((input.size()+ncoefs)/2)-1));
+		//extend vector here is a BAD idea
+		//output = evector<double>(DOWNSAMPLE*((input.size()+ncoefs-1)/DOWNSAMPLE));
 		//better to have it dimensioned outside, for the maximum, just once
-		//check this!!!
 
 		//DWT
 		//use low and high pass symmetric wavelet coefficients to achieve
 		//faster convolution using cross-CORRELATION
 		CrossCorrelation<T, tag>::execute(inputExt, w.lopfsym(), output, 0);
-		CrossCorrelation<T, tag>::execute(inputExt, w.hipfsym(), output, output.size()/2);
+		CrossCorrelation<T, tag>::execute(inputExt, w.hipfsym(), output, output.size()/DOWNSAMPLE);
+
 		//Non-symmetric wavelet coefficients gives cross-CORRELATION
 		//CrossCorrelation::execute(inputExt, w.lopf(), output, 0);
-		//CrossCorrelation::execute(inputExt, w.hipf(), output, output.size()/2);
+		//CrossCorrelation::execute(inputExt, w.hipf(), output, output.size()/DOWNSAMPLE);
 	}
 
 	/**
@@ -56,7 +56,8 @@ public:
 	 * PRE: inputSize >= 1 && wletnCoefs
 	 */
 	static int outputSize(int inputSize, int wletnCoefs) {
-		int n = floor((inputSize+wletnCoefs-1)/2.0); //divide by 2.0 to avoid integer division (which rounds and NOT ceils)
+		//int n = floor((inputSize+wletnCoefs-1)/2.0); //divide by 2.0 to avoid integer division (which rounds and NOT ceils)
+		int n = (inputSize+wletnCoefs-1)/DOWNSAMPLE;
 		return n;
 	}
 
