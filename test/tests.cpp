@@ -1,12 +1,10 @@
 //
 // Created by hdaniel on 13/04/19.
 //
-#include <sstream>
 #include <string>
 #include <iostream>
 #include <stopwatch/stopwatch.hpp>
 #include <catch2/catch.hpp>
-#include "../src/evector.hpp"
 #include "../src/wavelet.hpp"
 #include "../src/wavelettransform.hpp"
 #include "../src/archtypes.h"
@@ -15,63 +13,6 @@
 #define decimalDigits 3
 
 using namespace std;
-
-
-/***********
- * VECTORS *
- ***********/
-TEST_CASE( "Vector operations", "[evector]" ) {
-	evector<DTYPE> v0 = {};
-	evector<DTYPE> v1 = {1.1};
-	evector<DTYPE> v2 = {1.1, 2.2};
-	evector<DTYPE> v5 = {1.1, 2.2, 3.3, 4.4, 5.5};
-	string v5str = "[ 1.1 2.2 3.3 4.4 5.5 ]";
-
-    SECTION("Stream evector") {
-        stringstream out;
-        out << v5;
-        REQUIRE(out.str() == v5str);
-    }
-
-    SECTION("Vector to string") {
-        stringstream out;
-        out << v5;
-        REQUIRE(v5.toString() == v5str);
-    }
-
-    SECTION("Symmetric extension") {
-        evector<DTYPE> vt1 = v5; //copies evector (needed since symmExt works in place)
-		vt1.symmExt(3, 3);
-		REQUIRE(vt1.toString() == "[ 3.3 2.2 1.1 1.1 2.2 3.3 4.4 5.5 5.5 4.4 3.3 ]");
-		REQUIRE(vt1.toString('\n') == "[\n3.3\n2.2\n1.1\n1.1\n2.2\n3.3\n4.4\n5.5\n5.5\n4.4\n3.3\n]");
-
-		evector<DTYPE> vt2 = v5; //copies evector (needed since symmExt works in place)
-								 //needed new evector. reusing vt1 again will fail
-        vt2.symmExt(WaveletTransform::extBeforeSize(4),
-        		   WaveletTransform::extAfterSize(4, 1));  //odd
-        REQUIRE(vt2.toString() == "[ 2.2 1.1 1.1 2.2 3.3 4.4 5.5 5.5 4.4 3.3 ]");
-
-		evector<DTYPE> vt3 = v5; //copies evector (needed since symmExt works in place)
-								 //needed new evector. reusing vt1 again will fail
-		vt3.symmExt(WaveletTransform::extBeforeSize(4),
-				   WaveletTransform::extAfterSize(4, 2));  //even
-		REQUIRE(vt3.toString() == "[ 2.2 1.1 1.1 2.2 3.3 4.4 5.5 5.5 4.4 ]");
-
-		evector<DTYPE> vt4 = v0; //copies evector (needed since symmExt works in place)
-								 //needed new evector. reusing vt1 again will fail
-		REQUIRE_THROWS_AS(vt4.symmExt(1,1), std::length_error);
-
-		evector<DTYPE> vt5 = v1; //copies evector (needed since symmExt works in place)
-								 //needed new evector. reusing vt1 again will fail
-		vt5.symmExt(2, 2);
-		REQUIRE(vt5.toString() == "[ 1.1 1.1 1.1 1.1 1.1 ]");
-
-		evector<DTYPE> vt6 = v2; //copies evector (needed since symmExt works in place)
-								 //needed new evector. reusing vt1 again will fail
-		vt6.symmExt(5, 5);
-		REQUIRE(vt6.toString() == "[ 1.1 1.1 2.2 2.2 1.1 1.1 2.2 2.2 1.1 1.1 2.2 2.2 ]");
-	}
-}
 
 
 /************
@@ -89,8 +30,8 @@ TEST_CASE( "Wavelets", "[Wavelet]" ) {
 	REQUIRE(w1.size() == 2);
 	REQUIRE(w2.name() == "db2");
 	REQUIRE(w2.size() == 4);
-	REQUIRE(w1.toString() == w1.name()+"\nlo: [ 0.707107 0.707107 ]\nhi: [ -0.707107 0.707107 ]");
-	REQUIRE(w3.toString() == string("wvlt")+"\nlo: [ 1 2 3 4 5 ]\nhi: [ -5 4 -3 2 -1 ]");
+	REQUIRE(to_string(w1) == w1.name()+"\nlo: [ 0.707107 0.707107 ]\nhi: [ -0.707107 0.707107 ]");
+	REQUIRE(to_string(w3) == string("wvlt")+"\nlo: [ 1 2 3 4 5 ]\nhi: [ -5 4 -3 2 -1 ]");
 }
 
 
@@ -232,7 +173,7 @@ testTransform (Wavelet<DTYPE> wvlt,
 	const int osize = WaveletTransform::outputSize(signal.size(), wvlt.size());
 	auto output = evector<T>(DOWNSAMPLE * osize);
 	doTransform<T, tag>(wvlt, signal, output, 1);
-	REQUIRE(output.toString(' ', -1, decimalDigits) == expected);
+	REQUIRE(to_string(output, ' ', -1, decimalDigits) == expected);
 	//REQUIRE(output - expected < MAX_ERROR);
 };
 /*

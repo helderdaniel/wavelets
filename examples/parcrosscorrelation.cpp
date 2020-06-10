@@ -15,12 +15,13 @@
 #include <stopwatch/stopwatch.hpp>
 #include "../src/wavelet.hpp"
 #include "../src/wavelettransform.hpp"
-#include "../src/evector.hpp"
+#include <evector/evector.hpp>
 
 #define DTYPE double
 #define NUMTHREADS 8
 
 using namespace std;
+using namespace had;
 
 template <typename T>
 struct result {

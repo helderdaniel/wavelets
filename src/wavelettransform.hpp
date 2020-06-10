@@ -7,8 +7,10 @@
 
 #include <cmath>
 #include "wavelet.hpp"
-#include "evector.hpp"
+#include <evector/evector.hpp>
 #include "CrossCorrelation.hpp"
+
+using namespace had;
 
 class WaveletTransform {
 
@@ -53,7 +55,7 @@ public:
 	 * @param wletnCoefs: number of coefficients (low or high)
 	 * @return length of partial transform output vector
 	 *
-	 * PRE: inputSize >= 1 && wletnCoefs
+	 * @pre inputSize >= 1 && wletnCoefs
 	 */
 	static int outputSize(int inputSize, int wletnCoefs) {
 		//int n = floor((inputSize+wletnCoefs-1)/2.0); //divide by 2.0 to avoid integer division (which rounds and NOT ceils)
@@ -69,7 +71,7 @@ public:
 	 * @param wletnCoefs: number of coefficients (low or high)
 	 * @return length of partial transform output vector at level
 	 *
-	 * PRE: inputSize >= 1 && wletnCoefs >=2 && level >= 1
+	 * @pre inputSize >= 1 && wletnCoefs >=2 && level >= 1
 	 *
 	 * Note: a sequence general term would be better than an iterative way,
 	 * to find the return value
@@ -87,7 +89,7 @@ public:
 	 * @param wletnCoefs: number of coefficients (low or high)
 	 * @return number of samples to insert BEFORE
 	 *
-	 * PRE: wletnCoefs >=2
+	 * @pre: wletnCoefs >=2
 	 */
 	static int extBeforeSize(int wletnCoefs) {
 		int n = wletnCoefs-2;
@@ -99,9 +101,10 @@ public:
 	 * to compute the wavelet transform on the beginning of the
 	 * signal border
 	 * @param wletnCoefs: number of coefficients (low or high)
+	 * @param signalSize:
 	 * @return number of samples to insert AFTER
 	 *
-	 * PRE: wletnCoefs >=2 && signalSize >= 1
+	 * @pre: wletnCoefs >=2 && signalSize >= 1
 	 */
 	static int extAfterSize(int wletnCoefs, int signalSize) {
 		int n = wletnCoefs-2;

@@ -10,11 +10,12 @@
  */
 
 //include wavelet and extended vector
-#include "../src/evector.hpp"
+#include <evector/evector.hpp>
 #include "../src/wavelet.hpp"
 #include "../src/wavelettransform.hpp"
 
 #include <iostream>
+using namespace std;
 using namespace std;
 
 #define DTYPE double

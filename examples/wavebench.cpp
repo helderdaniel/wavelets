@@ -19,7 +19,7 @@ http://www.fftw.org/
 #include <numeric>
 #include "stopwatch/stopwatch.hpp"
 #include "../include/wavelib/wavelet2s.h"
-#include "../src/evector.hpp"
+#include <evector/evector.hpp>
 #include "../src/wavelet.hpp"
 #include "../src/wavelettransform.hpp"
 
@@ -27,7 +27,7 @@ http://www.fftw.org/
 #define BENCH1
 
 using namespace std;
-
+using namespace had;
 
 evector<double> test();
 int main() {

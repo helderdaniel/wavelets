@@ -5,8 +5,9 @@
 #ifndef INC_04_WAVELETS_WAVELET_HPP
 #define INC_04_WAVELETS_WAVELET_HPP
 
-#include "../src/evector.hpp"
+#include <evector/evector.hpp>
 using namespace std;
+using namespace had;
 
 /**
  * Abstract Wavelet base class
@@ -111,11 +112,11 @@ public:
      * lo=lopc()
      * hi=hipc()
  	 */
-	string toString() {
+	friend string to_string(const Wavelet& w) {
 		stringstream os;
-		os << name() << endl;
-		os << "lo: " << lopf() << endl;
-		os << "hi: " << hipf();
+		os << w.name() << endl;
+		os << "lo: " << w.lopf() << endl;
+		os << "hi: " << w.hipf();
 		return os.str();
 	}
 };

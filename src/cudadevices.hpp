@@ -8,11 +8,12 @@
 #include "cudacheck.h"
 #include <vector>
 #include <map>
-//#include <cuda.h>
+#include <cuda.h>
 #include <cuda_runtime.h>
 
 #include <iostream>
 #include <iomanip>
+
 using namespace std;
 
 /**

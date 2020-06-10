@@ -1,13 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
 
-#Project name
-project(04_wavelets CXX CUDA) #enable also CUDA
-
-set(SRC "src")
-set(EXAMPLES "examples")
-set(TEST "test")
-set(BIN "bin")
-
 #Cuda Setup
 set(CMAKE_CUDA_STANDARD 14)
 #NOT needed env variable set at:
@@ -40,6 +32,10 @@ set(CMAKE_EXE_LINKER_FLAGS  ${GCC_EXTRA_LINK_FLAGS})
 #Must be after set compiler paths
 project(04_wavelets CXX CUDA) #enable also CUDA
 
+set(SRC "src")
+set(EXAMPLES "examples")
+set(TEST "test")
+set(BIN "bin")
 
 #set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 #set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -52,25 +48,20 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../${BIN})
 set(INCLUDE "/home/hdaniel/Dropbox/01-libs/cpp")# "/usr/local/cuda-9.0/include")
 include_directories(. ${INCLUDE} )
 
-#catch2 lib
-set(CATCH2LIB "${BIN}/tests-main.o")
-set(CATCH2LIBSRC "${INCLUDE}/catch2/tests-main.cpp")
+#Catch2 lib
+set(CATCH2LIB "${INCLUDE}/catch2/libCatch2.a")
+
 
 #Wavelet lib
 set(WLETLIBSRC "${INCLUDE}/wavelib/wavelet2s.cpp")
 
-#GPU cross correlation
-set(GPUccross "${BIN}/crosscorrelation.o")
-set(GPUccrossSRC "${SRC}/crosscorrelation.cu")
-
-
-#Compile catch2 lib
-add_library(Catch2 ${CATCH2LIBSRC})
-#target_link_libraries(Catch2)
-
 #Compile Wavelet lib
 #add_library(LibsModule ${WLETLIBSRC})
 #target_link_libraries(LibsModule -lfftw3)
+
+#GPU cross correlation
+set(GPUccross "${BIN}/crosscorrelation.o")
+set(GPUccrossSRC "${SRC}/crosscorrelation.cu")
 
 #Compile GPU cross correlation
 add_library(GPUcc ${GPUccrossSRC})
@@ -99,7 +90,7 @@ add_executable(${TARGET} ${EXAMPLES}/${TARGET}.cpp)
 #Unit tests
 set(UNITTEST "tests")
 add_executable(${UNITTEST} ${TEST}/${UNITTEST}.cpp)
-target_link_libraries(${UNITTEST} Catch2)
+target_link_libraries(${UNITTEST} ${CATCH2LIB})
 target_link_libraries(${UNITTEST} GPUcc)
 
 

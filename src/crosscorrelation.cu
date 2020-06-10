@@ -9,7 +9,10 @@
 #include <cmath>
 #include <iostream>
 #include "ccorrelationbase.h"
-#include "evector.hpp"
+#include <evector/evector.hpp>
+
+using namespace std;
+using namespace had;
 
 //#define DEBUG
 #ifdef DEBUG
